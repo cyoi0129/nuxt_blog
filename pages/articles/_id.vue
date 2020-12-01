@@ -12,14 +12,20 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  data () {
+    return {
+      title: '',
+      description: ''
+    }
+  },
   head() {
     return {
-      title: 'Article',
+      title: this.title,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'Article page description'
+          content: this.description
         }
       ]
     }
@@ -35,6 +41,8 @@ export default {
       const aid = Number(this.$route.params.id)
       console.log(aid)
       if (aid) {
+        this.title = this.$store.getters.getSingle(aid).title
+        this.description = this.$store.getters.getSingle(aid).description
         return this.$store.getters.getSingle(aid)
       } else {
         consloe.log('failed')
