@@ -9,7 +9,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item v-for="(category, index) in categories" :key="index">
-                <v-card v-for="article in getArticles(category)" :key="article.aid" class="ma-2" :to="'/articles/' + article.aid" flat>
+                <v-card v-for="article in articles(category)" :key="article.aid" class="ma-2" :to="'/articles/' + article.aid" flat>
                     <v-row>
                     <v-col cols="8" xs="8">
                         <v-card-title class="px-2 py-0 ma-0">{{article.title}}</v-card-title>
@@ -32,21 +32,21 @@
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
 export default {
+  data: () => ({
+    tab:[]
+  }),
   head() {
     return {
-      title: 'Articles',
+      title: 'Articles list page',
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: 'Articles page description'
+          content: 'Articles list page description'
         }
       ]
     }
   },
-  data: () => ({
-    tab:[]
-  }),
   async asyncData({ store }) {
     if (store.getters['items'].length) {
       return
@@ -54,10 +54,7 @@ export default {
   await store.dispatch('fetchItems')
   },
   computed: {
-    articles() {
-      return this.$store.getters.items
-    },
-    getArticles: function() {
+    articles: function() {
       return function(category) {
         return this.$store.getters.getArticles(category)
       }
